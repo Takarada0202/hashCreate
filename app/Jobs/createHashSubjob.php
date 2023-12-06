@@ -4,25 +4,26 @@ namespace App\Jobs;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldBeUnique;
-use Illuminate\Support\Str;
 use Illuminate\Contracts\Queue\ShouldQueue;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
+use Illuminate\Support\Str;
+use App\Models\Hash;
+use Illuminate\Support\Facades\DB;
 
-class createHashSubjob implements ShouldQueue
+class createHashSubJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
      */
-    protected $i;
-    public function __construct($i)
+    private int $limit;
+    public function __construct($limit)
     {
         //
-        $this->i = $i;
+        $this->limit = $limit;
     }
 
     /**
@@ -30,13 +31,14 @@ class createHashSubjob implements ShouldQueue
      */
     public function handle()
     {
-        //
-        $i = $this->i;
-        $dbValue =[];
-        for ($j=0; $j < $i; $j++) {
-            $randomString = Str::random(24);
-            $dbValue[] =['hash' => $randomString];
-        };
-        DB::table('hash')->insert($dbValue);
+            $limit = $this->limit;
+            $dbValue = [];
+
+            for ($i = 0; $i < $limit; $i++) {
+                $randomString = Str::random(24);
+                $dbValue[] = ['hash' => $randomString];
+            }
+
+            Hash::insert($dbValue);
     }
 }

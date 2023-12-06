@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Log;
-use App\Jobs\hashCreatePodcast;
+use App\Jobs\createHashJob;
 
 
 
@@ -19,8 +19,8 @@ class hashController extends Controller
     public function hashCreate(request $request)
     {
         $index = $request->howMany;
-        hashCreatePodcast::dispatch($index);
+        createHashJob::dispatch($index);
         // }
-
+        return redirect()->route('index');
     }
 }

@@ -9,19 +9,23 @@ use Illuminate\Foundation\Bus\Dispatchable;
 use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Queue\SerializesModels;
 use Illuminate\Support\Str;
+use App\Models\Hash;
 use Illuminate\Support\Facades\DB;
-use App\Jobs\createHashSubjob;
+use App\Jobs\createHashSubJob;
+use Illuminate\Support\Facades\Log;
 
-class hashCreatePodcast implements ShouldQueue
+
+class createHashJob implements ShouldQueue
 {
     use Dispatchable, InteractsWithQueue, Queueable, SerializesModels;
 
     /**
      * Create a new job instance.
      */
-    protected $index;
+    private int $index;
     public function __construct($index)
     {
+        //
         $this->index = $index;
     }
 
@@ -30,13 +34,14 @@ class hashCreatePodcast implements ShouldQueue
      */
     public function handle()
     {
+        //
         $index = $this->index;
-        $chunk = 1000;
-        $i = $index < $chunk ? $index : 0;
+        $chunkSize = 1000;
 
-        for ($i; $i < $index; $i += $chunk) {
-            createHashSubjob::dispatch($i);
+        for ($offset = 0; $offset < $index; $offset += $chunkSize) {
+
+            $limit = min($chunkSize, $index - $offset);
+            createHashSubJob::dispatch($limit);
         }
-
     }
 }

@@ -11,7 +11,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('hash', function (Blueprint $table) {
+        Schema::create('hashes', function (Blueprint $table) {
             $table->id();
             $table->string('hash');
             $table->timestamps();
@@ -23,6 +23,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('hash');
+        Schema::dropIfExists('hashes');
     }
 };

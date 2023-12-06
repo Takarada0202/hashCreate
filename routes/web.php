@@ -15,5 +15,5 @@ use App\Jobs\insertHashEvent;
 */
 
 
-Route::get('/', [hashController::class, 'index']);
+Route::get('/', [hashController::class, 'index'])->name('index');
 Route::get('/create', [hashController::class, 'hashCreate']);
